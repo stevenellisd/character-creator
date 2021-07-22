@@ -20,94 +20,76 @@ class Character extends React.Component {
         };
     }
 
-    randomizeName() {
-        const first_names = ["Adana", "Bazel", "Chavorad", "Didelot", "Elina", "Florjan", "Gelbard", "Simon"];
-        const last_names = ["Ashbluff", "Belmont", "Covenbreath", "Dragoncutter", "Elfscribe"];
-        const first_name = first_names[Math.floor(Math.random()*first_names.length)];
-        const last_name = last_names[Math.floor(Math.random()*last_names.length)];
-        this.setState({
-            name: first_name + " " + last_name,
-          }); ;
-    }
-
-    rollDie() {
-        return Math.floor(Math.random() * 6) + 1;
-    }
-
-    skillRoll() {
-        let rolls = [];
-        for(let i = 0; i<4; i++) {
-            rolls.push(this.rollDie());
-        }
-        rolls.sort();
-        return rolls[1] + rolls[2] + rolls[3];
-    }
-
-    rollSkills() {
-        this.setState({
-            str: this.skillRoll(),
-            dex: this.skillRoll(),
-            con: this.skillRoll(),
-            int: this.skillRoll(),
-            wis: this.skillRoll(),
-            cha: this.skillRoll(),
-        });
+    getName() {
+        return this.state.name;
     }
 
     handleNameChange =
         (event) => {
             this.setState({
-              name: event.target.value,
+                name: event.target.value,
             });
-          };
+        };
 
     render() {
         const classes = ["Bard", "Cleric", "Druid", "Fighter"];
         const races = ["Dwarf", "Elf", "Gnome", "Human"];
+        console.log(this.props.character);
 
         return (
             <div>
                 <div>
-                    <TextField required id="name" label="Name" value={this.state.name} onChange={this.handleNameChange} />
-                    <Button variant="contained" color="primary" onClick={() => this.randomizeName()}>Randomize Name</Button>
+                    <TextField required id="name" label="Name" value={this.props.character.name} onChange={ (event) => this.props.handleNameChange(event, this.props.character.index)} />
                 </div>
                 <div>
-                    <TextField id="str" label="Strength" value={this.state.str} />
+                    <Button style={{margin: '4px'}} variant="contained" color="primary" onClick={() => this.props.randomizeName(this.props.character.index)}>Randomize Name</Button>
                 </div>
                 <div>
-                    <TextField id="dex" label="Dexterity" value={this.state.dex} />
+                    <TextField id="str" label="Strength" value={this.props.character.str} />
                 </div>
                 <div>
-                    <TextField id="con" label="Constitution" value={this.state.con} />
+                    <TextField id="dex" label="Dexterity" value={this.props.character.dex} />
                 </div>
                 <div>
-                    <TextField id="int" label="Intelligence" value={this.state.int} />
+                    <TextField id="con" label="Constitution" value={this.props.character.con} />
                 </div>
                 <div>
-                    <TextField id="wis" label="Wisdom" value={this.state.wis} />
+                    <TextField id="int" label="Intelligence" value={this.props.character.int} />
                 </div>
                 <div>
-                    <TextField id="cha" label="Charisma" value={this.state.cha} />
+                    <TextField id="wis" label="Wisdom" value={this.props.character.wis} />
                 </div>
                 <div>
-                    <Button variant="contained" color="primary" onClick={() => this.rollSkills()}>Roll Skills</Button>
+                    <TextField id="cha" label="Charisma" value={this.props.character.cha} />
+                </div>
+                <div>
+                    <Button style={{margin: '4px'}} variant="contained" color="primary" onClick={() => this.props.rollSkills(this.props.index)}>Roll Skills</Button>
+                </div>
+                <div>
+                    <Button style={{margin: '4px'}} variant="contained" color="primary" onClick={() => this.props.setDefaultSkills(this.props.index)}>Default Skills</Button>
                 </div>
                 <div>
                     <Autocomplete
                         id="class"
+                        freeSolo
                         options={classes}
                         getOptionLabel={(option) => option}
                         style={{ width: 300, margin: 8 }}
-                        renderInput={(params) => <TextField {...params} label="Class" variant="outlined" />}
+                        onInputChange={ (event, value) => this.props.handleClassChange(event, value, this.props.character.index)}
+                        value={this.props.character.class}
+                        renderInput={(params) => <TextField {...params} label="Class" variant="outlined" value={this.props.character.class}  />}
                     />
                 </div>
                 <div>
                     <Autocomplete
-                        id="class"
+                        id="race"
+                        freeSolo
                         options={races}
                         getOptionLabel={(option) => option}
                         style={{ width: 300, margin: 8 }}
-                        renderInput={(params) => <TextField {...params} label="Race" variant="outlined" />}
+                        onInputChange={ (event, value) => this.props.handleRaceChange(event, value, this.props.character.index)}
+                        value={this.props.character.race}
+                        renderInput={(params) => <TextField {...params} label="Race" variant="outlined" value={this.props.character.race}  />}
                     />
                 </div>
             </div>
