@@ -1,3 +1,5 @@
+Live version at https://stevenellisd.github.io/character-creator/
+
 # Character Creator
 
 The Character Generator audience and functionality specifics can be customized as you wish. This can be a tool used for specific tabletop roleplaying game characters or specific video game characters. It can be used as a source of inspiration for improv actors or for writers looking for character prompts. You must complete the user stories, following the requirements as laid out, with your audience and specified character functionality in mind. 
